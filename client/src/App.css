@@ -1,0 +1,153 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.main-container {
+  position: relative;
+  min-width: 768px;
+  min-height: 100vh;
+  padding: 48px 96px;
+  color: #ffffff;
+  background: linear-gradient(180deg, rgba(39, 39, 39, 0.8) 0%, #272727 40%), url(assets/background.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.navbar{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 80px;
+}
+
+.logo{
+  height: 48px;
+}
+
+.search{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 48px;
+}
+
+.search-bar{
+  position: relative;
+  width: 464px;
+  height: 48px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-bar input{
+  position: relative;
+  width: 464px;
+  height: 48px;
+  border-radius: 24px;
+  padding: 0 24px;
+  background: rgba(217, 217, 217, 0.2);
+}
+
+.search-bar input::placeholder{
+  color: #f5f5f5;
+}
+
+.search-icon{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  background: rgba(217, 217, 217, 0.2);
+}
+
+.search-ex{
+  font-size: 12px;
+}
+
+.prev-videos .heading{
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+
+.video-grid{
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  gap: 34px 42px;
+}
+
+.video{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.video-back{
+  position: relative;
+  background: rgba(217, 217, 217, 0.2);
+  width: 100%;
+  height: 140px;
+  border-radius: 18px;
+}
+
+.spam-perc{
+  position: absolute;
+  left: 24px;
+  bottom: 20px;
+}
+
+.video-info{
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.video-icon{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(217, 217, 217, 0.2);
+  border-radius: 22px;
+}
+
+.video-title{
+  font-weight: 600;
+}
+
+.video-channel, .video-time{
+  font-size: 12px;
+  opacity: 0.8;
+}
