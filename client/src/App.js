@@ -1,14 +1,37 @@
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router-dom';
+
 import './App.css';
-import Navbar from './components/layout/Navbar';
-import Body from './components/layout/Body';
+import RootLayout from './layout/RootLayout';
+import Home from './pages/Home/Home';
+import About from './pages/About/About';
+import VideoDetails from './pages/Video/VideoDetails';
+import { videoDetailsLoader } from './loaders/videoDetailsLoader';
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path='/' element={<RootLayout />}>
+      <Route index element={<Home />} />
+      <Route path='about' element={<About />} />
+
+      <Route path='video'>
+        <Route index element={<Home />} />
+        <Route
+          path=':id'
+          element={<VideoDetails />}
+          loader={videoDetailsLoader}
+        />
+      </Route>
+    </Route>
+  )
+);
 
 const App = () => {
-  return (
-    <div className='main-container'>
-      <Navbar />
-      <Body />
-    </div>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;
