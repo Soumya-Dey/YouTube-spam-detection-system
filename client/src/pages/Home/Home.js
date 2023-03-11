@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 
-import VideoList from '../VideoList/VideoList';
+import VideoList from './VideoList';
+import { Navigate } from 'react-router-dom';
 
-const Body = () => {
-  const [url, setUrl] = useState('https://www.youtube.com/watch?v=LQ3677p5NWg');
+const Home = () => {
+  const [url, setUrl] = useState('https://www.youtube.com/watch?v=4eM0wCck1MU');
+  const [videoId, setVideoId] = useState(null);
   const [videos, setVideos] = useState([
     {
       kind: 'youtube#video',
@@ -106,27 +108,16 @@ const Body = () => {
       },
     },
   ]);
-  const [commentData, setCommentData] = useState(null);
 
   const onChange = (event) => setUrl(event.target.value);
   const onSubmit = (event) => {
     event.preventDefault();
-    getComments();
-  };
-
-  const getComments = async () => {
-    const { data } = await axios({
-      url: `https://www.googleapis.com/youtube/v3/commentThreads?part=id,snippet&maxResults=50&videoId=${new URL(
-        url
-      ).searchParams.get('v')}&key=AIzaSyBAYuaxb_9SI3hQZDEdCmUfQyMBfEdcENQ`,
-      method: 'get',
-    });
-
-    setCommentData(data);
+    setVideoId(new URL(url).searchParams.get('v'));
   };
 
   return (
     <div className='body'>
+      {videoId && <Navigate to={`/video/${videoId}`} />}
       <div className='search'>
         <form className='search-bar' onSubmit={(event) => onSubmit(event)}>
           <input
@@ -151,4 +142,4 @@ const Body = () => {
   );
 };
 
-export default Body;
+export default Home;
