@@ -6,7 +6,10 @@ import { formatNumber } from '../../utils/formatter';
 import CommentItem from './CommentItem';
 import VideoInfo from './VideoInfo';
 
-import { commentsLoader } from '../../loaders/videoDetailsLoader';
+import {
+  commentsLoader,
+  performAnalysis,
+} from '../../loaders/videoDetailsLoader';
 
 const VideoDetails = () => {
   const { id } = useParams();
@@ -18,7 +21,32 @@ const VideoDetails = () => {
   const [comments, setComments] = useState(commentItems);
   const [nextPageToken, setNextPageToken] = useState(commentPageToken);
   const [fetching, setFetching] = useState(false);
+  const [analysing, setAnalysing] = useState(false);
   const [reportReady, setRepotrReady] = useState(false);
+
+  const analyzeComments = async () => {
+    console.log('performing analysis...');
+    setAnalysing(true);
+
+    try {
+      const analysisResult = await performAnalysis(id);
+
+      const spamComments = analysisResult.filter(
+        (comment) => comment.class == 'SPAM'
+      );
+      console.log({
+        analysisResult,
+        spamComments,
+        spamPerc: Math.round(
+          (spamComments.length / analysisResult.length) * 100
+        ),
+      });
+    } catch (error) {
+      console.error({ error });
+    } finally {
+      setAnalysing(true);
+    }
+  };
 
   const loadMoreComments = async () => {
     console.log('loading more...');
@@ -47,7 +75,9 @@ const VideoDetails = () => {
           <Link to='/' className='back-btn'>
             <ChevronLeftIcon className='h-6 w-6' />
           </Link>
-          <button className='analyze-btn'>Analyze Comments</button>
+          <button className='analyze-btn' onClick={analyzeComments}>
+            Analyze Comments
+          </button>
           {reportReady ? (
             <button className='report-btn'>View Report</button>
           ) : null}

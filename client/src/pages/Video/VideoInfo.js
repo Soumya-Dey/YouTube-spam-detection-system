@@ -13,7 +13,7 @@ const VideoInfo = ({ videoItems = [], id = '' }) => {
       <a
         className='video-back'
         style={{
-          backgroundImage: `url("${videoItems[0].snippet.thumbnails.maxres.url}")`,
+          backgroundImage: `url("${videoItems[0].snippet.thumbnails.standard.url}")`,
         }}
         href={`https://www.youtube.com/watch?v=${id}`}
       ></a>
