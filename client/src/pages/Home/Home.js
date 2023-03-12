@@ -3,7 +3,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 
 import VideoList from './VideoList';
-import { Navigate } from 'react-router-dom';
+import { Navigate, redirect } from 'react-router-dom';
 
 const Home = () => {
   const [url, setUrl] = useState('https://www.youtube.com/watch?v=4eM0wCck1MU');

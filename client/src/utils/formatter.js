@@ -20,3 +20,7 @@ export const getRandomColor = () => {
   }
   return `${color}80`;
 };
+
+export const getMarkup = (htmlStr) => {
+  return { __html: htmlStr };
+};
