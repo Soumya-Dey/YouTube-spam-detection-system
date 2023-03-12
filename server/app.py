@@ -21,13 +21,14 @@ def predict():
     if request.method == 'POST':
         body = request.get_json()
         data = np.array(body['comments'])
+        comments = [item['comment'] for item in data]
 
-        prediction = transform_predict(data)
+        prediction = transform_predict(comments)
 
         result = []
-        for i, comment in enumerate(data):
+        for i, item in enumerate(data):
             result.append(
-                {"comment": comment, "class": 'HAM' if prediction[i] == 0 else 'SPAM'})
+                {"id": item['id'], "comment": item['comment'], "class": 'HAM' if prediction[i] == 0 else 'SPAM'})
 
         print(result)
 

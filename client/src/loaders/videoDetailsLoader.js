@@ -35,3 +35,38 @@ export const commentsLoader = async (id, limit = 10, pageToken = null) => {
   console.log({ commentData });
   return commentData;
 };
+
+export const performAnalysis = async (id) => {
+  let result = [];
+  let pageToken = '';
+  do {
+    const {
+      status: commentStatus,
+      data: { items: commentItems, nextPageToken },
+    } = await axios({
+      url: `https://www.googleapis.com/youtube/v3/commentThreads?part=id,snippet&maxResults=100&videoId=${id}&pageToken=${pageToken}&key=AIzaSyBAYuaxb_9SI3hQZDEdCmUfQyMBfEdcENQ`,
+      method: 'get',
+    });
+    pageToken = commentStatus == 200 ? nextPageToken || '' : '';
+
+    const comments = commentItems.map((comment) => ({
+      id: comment.id,
+      comment:
+        comment.snippet &&
+        comment.snippet.topLevelComment &&
+        comment.snippet.topLevelComment.snippet
+          ? comment.snippet.topLevelComment.snippet.textOriginal || ''
+          : '',
+    }));
+    console.log({ comments });
+
+    const { data } = await axios({
+      url: '/predict',
+      method: 'post',
+      data: { comments },
+    });
+    result = [...result, ...data];
+  } while (pageToken && pageToken.length);
+
+  return result;
+};
