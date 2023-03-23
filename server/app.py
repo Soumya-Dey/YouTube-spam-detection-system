@@ -28,7 +28,7 @@ def predict():
         result = []
         for i, item in enumerate(data):
             result.append(
-                {"id": item['id'], "comment": item['comment'], "class": 'HAM' if prediction[i] == 0 else 'SPAM'})
+                {"id": item['id'], "author": item["author"], "comment": item['comment'], "class": 'HAM' if prediction[i] == 0 else 'SPAM'})
 
         print(result)
 

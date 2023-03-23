@@ -16,6 +16,7 @@
     "react-infinite-scroller": "^1.2.6",
     "react-router-dom": "^6.8.2",
     "react-scripts": "5.0.1",
+    "reactive-button": "^1.3.13",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
