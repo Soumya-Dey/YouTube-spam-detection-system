@@ -49,15 +49,35 @@ export const performAnalysis = async (id) => {
     });
     pageToken = commentStatus == 200 ? nextPageToken || '' : '';
 
-    const comments = commentItems.map((comment) => ({
-      id: comment.id,
-      comment:
-        comment.snippet &&
-        comment.snippet.topLevelComment &&
-        comment.snippet.topLevelComment.snippet
-          ? comment.snippet.topLevelComment.snippet.textOriginal || ''
-          : '',
-    }));
+    const comments = commentItems.map((comment) => {
+      return {
+        id: comment.id,
+        comment:
+          comment.snippet &&
+          comment.snippet.topLevelComment &&
+          comment.snippet.topLevelComment.snippet
+            ? comment.snippet.topLevelComment.snippet.textOriginal || ''
+            : '',
+        author:
+          comment.snippet &&
+          comment.snippet.topLevelComment &&
+          comment.snippet.topLevelComment.snippet
+            ? {
+                channelId: comment.snippet.topLevelComment.snippet
+                  .authorChannelId
+                  ? comment.snippet.topLevelComment.snippet.authorChannelId
+                      .value
+                  : 'Unknown',
+                channelUrl:
+                  comment.snippet.topLevelComment.snippet.authorChannelUrl,
+                channelName:
+                  comment.snippet.topLevelComment.snippet.authorDisplayName,
+                profileImg:
+                  comment.snippet.topLevelComment.snippet.authorProfileImageUrl,
+              }
+            : null,
+      };
+    });
     console.log({ comments });
 
     const { data } = await axios({

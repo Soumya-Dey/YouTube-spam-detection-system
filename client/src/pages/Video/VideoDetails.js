@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLoaderData, useParams } from 'react-router-dom';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import ReactiveButton from 'reactive-button';
 
-import { formatNumber } from '../../utils/formatter';
+import { formatNumber, groupBy } from '../../utils/formatter';
 import CommentItem from './CommentItem';
 import VideoInfo from './VideoInfo';
 
@@ -21,30 +22,55 @@ const VideoDetails = () => {
   const [comments, setComments] = useState(commentItems);
   const [nextPageToken, setNextPageToken] = useState(commentPageToken);
   const [fetching, setFetching] = useState(false);
-  const [analysing, setAnalysing] = useState(false);
+  const [analysing, setAnalysing] = useState('idle');
   const [reportReady, setRepotrReady] = useState(false);
+  const [result, setResult] = useState(null);
 
   const analyzeComments = async () => {
     console.log('performing analysis...');
-    setAnalysing(true);
+    setAnalysing('loading');
 
     try {
       const analysisResult = await performAnalysis(id);
 
-      const spamComments = analysisResult.filter(
-        (comment) => comment.class == 'SPAM'
+      const spamComments = [];
+      const likelySpammers = [];
+      const commentsGrouped = groupBy(
+        analysisResult,
+        (comment) => comment.author.channelId
       );
-      console.log({
+
+      console.log({ commentsGrouped });
+      analysisResult.forEach((comment) => {
+        if (comment.class == 'SPAM') {
+          spamComments.push(comment);
+          if (
+            comment.author &&
+            likelySpammers.findIndex(
+              (spammer) => spammer.channelId == comment.author.channelId
+            ) < 0
+          )
+            likelySpammers.push(comment.author);
+        }
+      });
+      setResult({
         analysisResult,
         spamComments,
+        likelySpammers,
+        commentsGrouped,
         spamPerc: Math.round(
           (spamComments.length / analysisResult.length) * 100
         ),
       });
+
+      console.log({
+        result,
+      });
     } catch (error) {
       console.error({ error });
     } finally {
-      setAnalysing(true);
+      setAnalysing('success');
+      setRepotrReady(true);
     }
   };
 
@@ -75,11 +101,27 @@ const VideoDetails = () => {
           <Link to='/' className='back-btn'>
             <ChevronLeftIcon className='h-6 w-6' />
           </Link>
-          <button className='analyze-btn' onClick={analyzeComments}>
-            Analyze Comments
-          </button>
+          {/* <button className='analyze-btn' onClick={analyzeComments}>
+            {analysing ? 'Analysing... ' : 'Analyze Comments'}
+          </button> */}
+          <ReactiveButton
+            buttonState={analysing}
+            idleText='Analyse Comments'
+            loadingText='Analysing... Wait'
+            successText='Analysis Complete'
+            onClick={analyzeComments}
+            size='large'
+            rounded
+            style={{ padding: '12px 24px' }}
+          />
           {reportReady ? (
-            <button className='report-btn'>View Report</button>
+            <ReactiveButton
+              idleText='View Report'
+              size='large'
+              color='teal'
+              rounded
+              style={{ padding: '12px 24px' }}
+            />
           ) : null}
         </div>
         <div className='video-comments'>
