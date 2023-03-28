@@ -6,6 +6,7 @@ import ReactiveButton from 'reactive-button';
 import { formatNumber, groupBy } from '../../utils/formatter';
 import CommentItem from './CommentItem';
 import VideoInfo from './VideoInfo';
+import Report from './Report';
 
 import {
   commentsLoader,
@@ -24,6 +25,7 @@ const VideoDetails = () => {
   const [fetching, setFetching] = useState(false);
   const [analysing, setAnalysing] = useState('idle');
   const [reportReady, setRepotrReady] = useState(false);
+  const [showReport, setShowReport] = useState(true);
   const [result, setResult] = useState(null);
 
   const analyzeComments = async () => {
@@ -92,7 +94,9 @@ const VideoDetails = () => {
 
   const hasMoreComments = !!nextPageToken;
 
-  return (
+  return showReport ? (
+    <Report />
+  ) : (
     <div className='video-container'>
       <VideoInfo videoItems={videoItems} id={id} />
 
@@ -102,8 +106,8 @@ const VideoDetails = () => {
             <ChevronLeftIcon className='h-6 w-6' />
           </Link>
           {/* <button className='analyze-btn' onClick={analyzeComments}>
-            {analysing ? 'Analysing... ' : 'Analyze Comments'}
-          </button> */}
+        {analysing ? 'Analysing... ' : 'Analyze Comments'}
+      </button> */}
           <ReactiveButton
             buttonState={analysing}
             idleText='Analyse Comments'
@@ -115,13 +119,15 @@ const VideoDetails = () => {
             style={{ padding: '12px 24px' }}
           />
           {reportReady ? (
-            <ReactiveButton
-              idleText='View Report'
-              size='large'
-              color='teal'
-              rounded
-              style={{ padding: '12px 24px' }}
-            />
+            <Link to='/report'>
+              <ReactiveButton
+                idleText='View Report'
+                size='large'
+                color='teal'
+                rounded
+                style={{ padding: '12px 24px' }}
+              />
+            </Link>
           ) : null}
         </div>
         <div className='video-comments'>

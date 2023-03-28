@@ -85,6 +85,7 @@ export const performAnalysis = async (id) => {
       method: 'post',
       data: { comments },
     });
+
     result = [...result, ...data];
   } while (pageToken && pageToken.length);
 
