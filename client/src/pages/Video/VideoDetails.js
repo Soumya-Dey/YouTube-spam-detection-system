@@ -25,8 +25,24 @@ const VideoDetails = () => {
   const [fetching, setFetching] = useState(false);
   const [analysing, setAnalysing] = useState('idle');
   const [reportReady, setRepotrReady] = useState(false);
-  const [showReport, setShowReport] = useState(true);
+  const [showReport, setShowReport] = useState(false);
   const [result, setResult] = useState(null);
+
+  const loadMoreComments = async () => {
+    console.log('loading more...');
+    setFetching(true);
+
+    try {
+      const commentData = await commentsLoader(id, 10, nextPageToken);
+      console.log({ moreComments: commentData });
+      setComments([...comments, ...commentData.items]);
+      setNextPageToken(commentData.nextPageToken);
+    } catch (error) {
+      console.error({ error });
+    } finally {
+      setFetching(false);
+    }
+  };
 
   const analyzeComments = async () => {
     console.log('performing analysis...');
@@ -61,9 +77,31 @@ const VideoDetails = () => {
         likelySpammers,
         commentsGrouped,
         spamPerc: Math.round(
-          (spamComments.length / analysisResult.length) * 100
+          (spamComments.length / videoItems[0].statistics.commentCount) * 100
         ),
       });
+
+      const prevAnalysed = localStorage.getItem('prevAnalysed')
+        ? JSON.parse(localStorage.getItem('prevAnalysed'))
+        : [];
+      console.log({ prevAnalysed });
+      if (
+        !prevAnalysed.length ||
+        prevAnalysed.findIndex((item) => item.id == id) < 0
+      ) {
+        const newVideo = {
+          id,
+          title: videoItems[0].snippet.title,
+          channelTitle: videoItems[0].snippet.channelTitle,
+          publishedAt: videoItems[0].snippet.publishedAt,
+          thumbnail: videoItems[0].snippet.thumbnails.standard.url,
+          spamPerc: Math.round(
+            (spamComments.length / videoItems[0].statistics.commentCount) * 100
+          ),
+        };
+        prevAnalysed.push(newVideo);
+        localStorage.setItem('prevAnalysed', JSON.stringify(prevAnalysed));
+      }
 
       console.log({
         result,
@@ -76,26 +114,15 @@ const VideoDetails = () => {
     }
   };
 
-  const loadMoreComments = async () => {
-    console.log('loading more...');
-    setFetching(true);
-
-    try {
-      const commentData = await commentsLoader(id, 10, nextPageToken);
-      console.log({ moreComments: commentData });
-      setComments([...comments, ...commentData.items]);
-      setNextPageToken(commentData.nextPageToken);
-    } catch (error) {
-      console.error({ error });
-    } finally {
-      setFetching(false);
-    }
-  };
-
   const hasMoreComments = !!nextPageToken;
 
   return showReport ? (
-    <Report />
+    <Report
+      videoItems={videoItems}
+      id={id}
+      result={result}
+      setShowReport={setShowReport}
+    />
   ) : (
     <div className='video-container'>
       <VideoInfo videoItems={videoItems} id={id} />
@@ -105,9 +132,6 @@ const VideoDetails = () => {
           <Link to='/' className='back-btn'>
             <ChevronLeftIcon className='h-6 w-6' />
           </Link>
-          {/* <button className='analyze-btn' onClick={analyzeComments}>
-        {analysing ? 'Analysing... ' : 'Analyze Comments'}
-      </button> */}
           <ReactiveButton
             buttonState={analysing}
             idleText='Analyse Comments'
@@ -119,15 +143,14 @@ const VideoDetails = () => {
             style={{ padding: '12px 24px' }}
           />
           {reportReady ? (
-            <Link to='/report'>
-              <ReactiveButton
-                idleText='View Report'
-                size='large'
-                color='teal'
-                rounded
-                style={{ padding: '12px 24px' }}
-              />
-            </Link>
+            <ReactiveButton
+              idleText='View Report'
+              size='large'
+              color='teal'
+              rounded
+              style={{ padding: '12px 24px' }}
+              onClick={() => setShowReport(true)}
+            />
           ) : null}
         </div>
         <div className='video-comments'>

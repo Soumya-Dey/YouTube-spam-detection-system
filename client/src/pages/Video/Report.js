@@ -1,49 +1,73 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import ReactiveButton from 'reactive-button';
 
-import DoughnutChart from './DoughnutChart';
+import BarChart from './BarChart';
+import ReportStats from './ReportStats';
+import ReportSpammers from './ReportSpammers';
 
-const Report = () => {
+const Report = ({ videoItems = [], id = '', result = null, setShowReport }) => {
+  const [exporting, setExporting] = useState('idle');
+  const barData = [result.spamPerc, 100 - result.spamPerc];
+  const reportStats = {
+    viewCount: videoItems[0].statistics.viewCount,
+    likeCount: videoItems[0].statistics.likeCount,
+    favoriteCount: videoItems[0].statistics.favoriteCount,
+    commentCount: videoItems[0].statistics.commentCount,
+    spamPerc: result.spamPerc,
+    uniqueCommenters: result.commentsGrouped.size,
+    likelySpammers: result.likelySpammers.length,
+  };
+
+  const printReport = () => {
+    setExporting('loading');
+    window.print();
+    setExporting('success');
+  };
+
   return (
     <div>
-      {/* <p className='report-heading'>Video Comment Report</p> */}
+      <div className='report-upper'>
+        <p className='report-heading'>Video Comment Report</p>
+        <div className='comment-btns'>
+          <button
+            onClick={() => setShowReport(false)}
+            to='/'
+            className='back-btn'
+          >
+            <ChevronLeftIcon className='h-6 w-6' />
+          </button>
+
+          <ReactiveButton
+            buttonState={exporting}
+            idleText='Export Report'
+            loadingText='Exporting... Wait'
+            successText='Report Exported'
+            onClick={printReport}
+            size='large'
+            rounded
+            style={{
+              padding: '12px 24px',
+            }}
+          />
+        </div>
+      </div>
       <div className='report-container'>
-        <div className='report-left'>
-          <div className='report-item report-stats'>
-            <p className='report-header stats-header'>Video Stats</p>
-            <div className='stats-info'>
-              <p className='stats-view'>
-                <span>678K</span> views
-              </p>
-              <p className='stats-like'>
-                <span>68K</span> likes
-              </p>
-              <p className='stats-favourite'>
-                <span>459</span> favourites
-              </p>
-              <p className='stats-comment'>
-                <span>12K</span> comments
-              </p>
-              <p className='stats-comment'>
-                <span>21%</span> spam
-              </p>
-              <p className='stats-comment'>
-                <span>79%</span> ham
-              </p>
-            </div>
-          </div>
+        <div className='report-top'>
+          <ReportStats reportStats={reportStats} />
 
           <div className='report-item report-chart'>
-            <p className='report-header spammer-header'>Likely Spammers</p>
-            <div className='spammer-info'></div>
+            <p className='report-header chart-header'>SPAM vs HAM comments</p>
+            <div className='chart'>
+              <BarChart barData={barData} />
+            </div>
           </div>
         </div>
 
-        <div className='report-right'>
-          <div className='report-item report-chart'>
-            <p className='report-header chart-header'>Analysis of Comments</p>
-            <div className='chart'>
-              <DoughnutChart />
-            </div>
+        <div className='report-bottom'>
+          <div className='report-item report-spammer'>
+            <p className='report-header spammer-header'>Likely Spammers</p>
+            <ReportSpammers likelySpammers={result.likelySpammers} />
           </div>
         </div>
       </div>
