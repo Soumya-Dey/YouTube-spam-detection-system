@@ -7,15 +7,11 @@ import { formatDateDistance } from '../../utils/formatter';
 
 const VideoItem = ({
   video: {
-    id = '',
-    snippet: {
-      title = '',
-      publishedAt = '',
-      thumbnails: {
-        default: { url = '' },
-      },
-      channelTitle = '',
-    },
+    id,
+    title = '',
+    channelTitle = '',
+    publishedAt = '',
+    thumbnail = '',
     spamPerc = 0,
   },
 }) => {
@@ -24,7 +20,7 @@ const VideoItem = ({
       <NavLink
         className='video-back'
         style={{
-          backgroundImage: `url("${url}")`,
+          backgroundImage: `url("${thumbnail}")`,
         }}
         to={`/video/${id}`}
       >
@@ -43,7 +39,7 @@ const VideoItem = ({
           </NavLink>
           <p className='video-channel'>
             {channelTitle}&nbsp;&nbsp;|&nbsp;&nbsp;
-            {formatDateDistance(publishedAt)}
+            {formatDateDistance(new Date(publishedAt))}
           </p>
         </div>
       </div>

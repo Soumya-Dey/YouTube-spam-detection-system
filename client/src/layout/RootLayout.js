@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink, ScrollRestoration } from 'react-router-dom';
 import { Bars3Icon, InformationCircleIcon } from '@heroicons/react/24/outline';
 
 import logo from '../assets/logo.svg';
@@ -8,6 +8,7 @@ import githubIcon from '../assets/github-icon.svg';
 const RootLayout = () => {
   return (
     <div className='main-container'>
+      <ScrollRestoration />
       <div className='navbar'>
         <Bars3Icon className='h-8 w-8' />
         <NavLink to='/' className='logo-link'>
