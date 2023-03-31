@@ -39,6 +39,7 @@ export const commentsLoader = async (id, limit = 10, pageToken = null) => {
 export const performAnalysis = async (id) => {
   let result = [];
   let pageToken = '';
+  let i = 1;
   do {
     const {
       status: commentStatus,
@@ -78,14 +79,15 @@ export const performAnalysis = async (id) => {
             : null,
       };
     });
-    console.log({ comments });
 
     const { data } = await axios({
-      url: '/predict',
+      url: `/predict${i}`,
       method: 'post',
       data: { comments },
     });
+    i = i == 5 ? 1 : i++;
 
+    console.log({ data });
     result = [...result, ...data];
   } while (pageToken && pageToken.length);
 
