@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import axios from 'axios';
+import { Navigate, useSearchParams } from 'react-router-dom';
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 import VideoList from './VideoList';
-import { Navigate, redirect } from 'react-router-dom';
+import Error from './Error';
 
 const Home = () => {
   useEffect(() => {
@@ -13,6 +13,7 @@ const Home = () => {
     setVideos(prevAnalysed);
   }, []);
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [url, setUrl] = useState('');
   const [videoId, setVideoId] = useState(null);
   const [videos, setVideos] = useState([]);
@@ -25,6 +26,12 @@ const Home = () => {
 
   return (
     <div className='body'>
+      {searchParams.get('error') && (
+        <Error
+          error={searchParams.get('error')}
+          setSearchParams={setSearchParams}
+        />
+      )}
       {videoId && <Navigate to={`/video/${videoId}`} />}
       <div className='search'>
         <form className='search-bar' onSubmit={(event) => onSubmit(event)}>

@@ -17,7 +17,8 @@ def keepOnlyAscii(str):
 
 vectorizer = load('../model/vectorizer.joblib')
 tfidf_transformer = load('../model/tfidf.joblib')
-model = load('../model/svm_linear.joblib')
+# model = load('../model/svm_linear.joblib')
+model = load('../model/multinomial_nb.joblib')
 
 
 def transform_predict(data):
@@ -29,5 +30,12 @@ def transform_predict(data):
     data_tfidf = tfidf_transformer.transform(data_counts)
 
     predictions = model.predict(data_tfidf)
+    prediction_probs = model.predict_proba(data_tfidf)
+    print(prediction_probs)
+
+    for i, pred in enumerate(predictions):
+        if(pred == 1 and prediction_probs[i][pred] < 0.65):
+            print(pred, prediction_probs[i])
+            predictions[i] = 0
 
     return predictions

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLoaderData, useParams } from 'react-router-dom';
+import { Link, Navigate, useLoaderData, useParams } from 'react-router-dom';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import ReactiveButton from 'reactive-button';
 
@@ -81,7 +81,7 @@ const VideoDetails = () => {
         ),
       });
 
-      const prevAnalysed = localStorage.getItem('prevAnalysed')
+      let prevAnalysed = localStorage.getItem('prevAnalysed')
         ? JSON.parse(localStorage.getItem('prevAnalysed'))
         : [];
       console.log({ prevAnalysed });
@@ -94,12 +94,17 @@ const VideoDetails = () => {
           title: videoItems[0].snippet.title,
           channelTitle: videoItems[0].snippet.channelTitle,
           publishedAt: videoItems[0].snippet.publishedAt,
-          thumbnail: videoItems[0].snippet.thumbnails.standard.url,
+          thumbnail: videoItems[0].snippet.thumbnails.high
+            ? videoItems[0].snippet.thumbnails.high.url
+            : videoItems[0].snippet.thumbnails.default.url,
           spamPerc: Math.round(
             (spamComments.length / videoItems[0].statistics.commentCount) * 100
           ),
         };
-        prevAnalysed.push(newVideo);
+
+        console.log({ prevAnalysed });
+        prevAnalysed = [newVideo, ...prevAnalysed];
+        console.log({ prevAnalysed });
         localStorage.setItem('prevAnalysed', JSON.stringify(prevAnalysed));
       }
 
@@ -125,6 +130,9 @@ const VideoDetails = () => {
     />
   ) : (
     <div className='video-container'>
+      {videoItems[0].statistics.commentCount <= 100 && (
+        <Navigate to='/?error=Please choose a video that has more than 100 comments!' />
+      )}
       <VideoInfo videoItems={videoItems} id={id} />
 
       <div className='video-right'>
