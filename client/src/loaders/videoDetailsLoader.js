@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { SERVER_URL } from '../../env';
+
 export const videoDetailsLoader = async ({ params }) => {
   const { id } = params;
 
@@ -81,7 +83,7 @@ export const performAnalysis = async (id) => {
     });
 
     const { data } = await axios({
-      url: `/predict${i}`,
+      url: `${SERVER_URL}/predict${i}`,
       method: 'post',
       data: { comments },
     });
