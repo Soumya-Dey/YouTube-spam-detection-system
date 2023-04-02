@@ -17,8 +17,8 @@ def keepOnlyAscii(str):
 
 vectorizer = load('../model/vectorizer.joblib')
 tfidf_transformer = load('../model/tfidf.joblib')
-# model = load('../model/svm_linear.joblib')
-model = load('../model/multinomial_nb.joblib')
+model = load('../model/svm_linear.joblib')
+# model = load('../model/multinomial_nb.joblib')
 
 
 def transform_predict(data):
