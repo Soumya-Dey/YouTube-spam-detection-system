@@ -1,8 +1,11 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS, cross_origin
 import numpy as np
 from utils import transform_predict
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 @app.errorhandler(Exception)
@@ -12,11 +15,13 @@ def server_error(err):
 
 
 @app.route("/")
+@cross_origin()
 def root():
     return jsonify(msg='Server running on => http://localhost:5000')
 
 
 @app.route("/predict1", methods=['POST'])
+@cross_origin()
 def predict1():
     if request.method == 'POST':
         body = request.get_json()
