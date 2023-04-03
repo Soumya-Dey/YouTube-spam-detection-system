@@ -122,6 +122,7 @@ const VideoDetails = () => {
   const hasMoreComments = !!nextPageToken;
 
   return showReport ? (
+    // Report component
     <Report
       videoItems={videoItems}
       id={id}
@@ -129,12 +130,17 @@ const VideoDetails = () => {
       setShowReport={setShowReport}
     />
   ) : (
+    // Video Details
     <div className='video-container'>
+      {/* Returning to previous pafe if the video has less than 100 comments */}
       {videoItems[0].statistics.commentCount <= 100 && (
         <Navigate to='/?error=Please choose a video that has more than 100 comments!' />
       )}
+
+      {/* Video Info */}
       <VideoInfo videoItems={videoItems} id={id} />
 
+      {/* Video Comments */}
       <div className='video-right'>
         <div className='comment-btns'>
           <Link to='/' className='back-btn'>
@@ -167,6 +173,7 @@ const VideoDetails = () => {
           </p>
 
           <div className='comment-list'>
+            {/* Showing the list of comments using the CommentItem component */}
             {comments.map((comment) => (
               <CommentItem comment={comment} key={comment.id} />
             ))}

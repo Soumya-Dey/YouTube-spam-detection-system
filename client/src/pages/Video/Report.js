@@ -8,7 +8,10 @@ import ReportSpammers from './ReportSpammers';
 
 const Report = ({ videoItems = [], id = '', result = null, setShowReport }) => {
   const [exporting, setExporting] = useState('idle');
+  // Bar chat data
   const barData = [result.spamPerc, 100 - result.spamPerc];
+
+  // Report stats
   const reportStats = {
     viewCount: videoItems[0].statistics.viewCount,
     likeCount: videoItems[0].statistics.likeCount,
@@ -54,8 +57,10 @@ const Report = ({ videoItems = [], id = '', result = null, setShowReport }) => {
       </div>
       <div className='report-container'>
         <div className='report-top'>
+          {/* Report Stats */}
           <ReportStats reportStats={reportStats} />
 
+          {/* Bar Chart */}
           <div className='report-item report-chart'>
             <p className='report-header chart-header'>SPAM vs HAM comments</p>
             <div className='chart'>
@@ -64,6 +69,7 @@ const Report = ({ videoItems = [], id = '', result = null, setShowReport }) => {
           </div>
         </div>
 
+        {/* Like Spammers List */}
         <div className='report-bottom'>
           <div className='report-item report-spammer'>
             <p className='report-header spammer-header'>Likely Spammers</p>

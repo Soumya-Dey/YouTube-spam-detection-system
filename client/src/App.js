@@ -14,12 +14,19 @@ import { videoDetailsLoader } from './loaders/videoDetailsLoader';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
+    // Main app layout
     <Route path='/' element={<RootLayout />}>
+      {/* Home Page */}
       <Route index element={<Home />} />
+
+      {/* About Page */}
       <Route path='about' element={<About />} />
 
+      {/* Video Page */}
       <Route path='video'>
         <Route index element={<Home />} />
+
+        {/* Single Video Details Page */}
         <Route
           path=':id'
           element={<VideoDetails />}
@@ -30,8 +37,6 @@ const router = createBrowserRouter(
   )
 );
 
-const App = () => {
-  return <RouterProvider router={router} />;
-};
+const App = () => <RouterProvider router={router} />;
 
 export default App;
