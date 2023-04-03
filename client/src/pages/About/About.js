@@ -22,7 +22,6 @@ const About = () => {
             size='large'
             rounded
             style={{ padding: '12px 24px' }}
-            onClick={() => setShowReport(true)}
           />
         </Link>
 
@@ -36,7 +35,6 @@ const About = () => {
             color='teal'
             rounded
             style={{ padding: '12px 24px' }}
-            onClick={() => setShowReport(true)}
           />
         </a>
       </div>

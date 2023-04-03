@@ -6,6 +6,7 @@ import VideoList from './VideoList';
 import Error from './Error';
 
 const Home = () => {
+  // Other related code
   useEffect(() => {
     const prevAnalysed = localStorage.getItem('prevAnalysed')
       ? JSON.parse(localStorage.getItem('prevAnalysed'))
@@ -26,6 +27,7 @@ const Home = () => {
 
   return (
     <div className='body'>
+      {/* Error component */}
       {searchParams.get('error') && (
         <Error
           error={searchParams.get('error')}
@@ -33,6 +35,8 @@ const Home = () => {
         />
       )}
       {videoId && <Navigate to={`/video/${videoId}`} />}
+
+      {/* Search component */}
       <div className='search'>
         <form className='search-bar' onSubmit={(event) => onSubmit(event)}>
           <input
@@ -52,6 +56,7 @@ const Home = () => {
         </p>
       </div>
 
+      {/* VideoList component */}
       <VideoList videos={videos} />
     </div>
   );
