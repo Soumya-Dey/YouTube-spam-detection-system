@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-import { SERVER_URL } from '../../env';
+import { SERVER_URL, KEY } from '../env';
 
 export const videoDetailsLoader = async ({ params }) => {
   const { id } = params;
 
   const { status: videoStatus, data: videoData } = await axios({
-    url: `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${id}&key=AIzaSyBAYuaxb_9SI3hQZDEdCmUfQyMBfEdcENQ`,
+    url: `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${id}&key=${KEY}`,
     method: 'get',
   });
   if (videoStatus != 200) {
@@ -14,7 +14,7 @@ export const videoDetailsLoader = async ({ params }) => {
   }
 
   const { status: commentStatus, data: commentData } = await axios({
-    url: `https://www.googleapis.com/youtube/v3/commentThreads?part=id,snippet&maxResults=10&videoId=${id}&key=AIzaSyBAYuaxb_9SI3hQZDEdCmUfQyMBfEdcENQ`,
+    url: `https://www.googleapis.com/youtube/v3/commentThreads?part=id,snippet&maxResults=10&videoId=${id}&key=${KEY}`,
     method: 'get',
   });
   if (commentStatus != 200) {
@@ -27,7 +27,7 @@ export const videoDetailsLoader = async ({ params }) => {
 
 export const commentsLoader = async (id, limit = 10, pageToken = null) => {
   const { status: commentStatus, data: commentData } = await axios({
-    url: `https://www.googleapis.com/youtube/v3/commentThreads?part=id,snippet&maxResults=${limit}&videoId=${id}&pageToken=${pageToken}&key=AIzaSyBAYuaxb_9SI3hQZDEdCmUfQyMBfEdcENQ`,
+    url: `https://www.googleapis.com/youtube/v3/commentThreads?part=id,snippet&maxResults=${limit}&videoId=${id}&pageToken=${pageToken}&key=${KEY}`,
     method: 'get',
   });
   if (commentStatus != 200) {
@@ -46,7 +46,7 @@ export const performAnalysis = async (id) => {
       status: commentStatus,
       data: { items: commentItems, nextPageToken },
     } = await axios({
-      url: `https://www.googleapis.com/youtube/v3/commentThreads?part=id,snippet&maxResults=100&videoId=${id}&pageToken=${pageToken}&key=AIzaSyBAYuaxb_9SI3hQZDEdCmUfQyMBfEdcENQ`,
+      url: `https://www.googleapis.com/youtube/v3/commentThreads?part=id,snippet&maxResults=100&videoId=${id}&pageToken=${pageToken}&key=${KEY}`,
       method: 'get',
     });
     pageToken = commentStatus == 200 ? nextPageToken || '' : '';
