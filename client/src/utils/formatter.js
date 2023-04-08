@@ -12,15 +12,6 @@ export const formatDateDistance = (date) =>
     addSuffix: true,
   });
 
-export const getRandomColor = () => {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return `${color}80`;
-};
-
 export const getMarkup = (htmlStr) => {
   return { __html: htmlStr };
 };

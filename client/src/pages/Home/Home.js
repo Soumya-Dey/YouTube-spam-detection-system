@@ -22,7 +22,11 @@ const Home = () => {
   const onChange = (event) => setUrl(event.target.value);
   const onSubmit = (event) => {
     event.preventDefault();
-    setVideoId(new URL(url).searchParams.get('v'));
+    const videoLink = new URL(url);
+    if (videoLink.pathname == '/watch' && videoLink.searchParams.get('v'))
+      setVideoId(videoLink.searchParams.get('v'));
+    else if (videoLink.pathname) setVideoId(videoLink.pathname.slice(1));
+    else setVideoId(null);
   };
 
   return (
