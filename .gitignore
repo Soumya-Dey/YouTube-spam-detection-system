@@ -5,3 +5,4 @@ client/node_modules
 *.vscode
 env.py
 .ipynb_checkpoints
+client/src/env.js
