@@ -27,6 +27,8 @@ In this project, we show an online spam detection system that can be used in rea
 
 The Back-End server is developed using Flask as the framework.
 
+### **Base URL**: http://43.207.40.116:8000
+
 ### **Endpoint 1:**
 
 **URL**: `/`
@@ -39,7 +41,7 @@ The Back-End server is developed using Flask as the framework.
 
 ```
 {
-  "msg": "Server running on => http://localhost:5000"
+  "msg": "Server running on localhost"
 }
 
 ```
